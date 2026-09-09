@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 aws-lc-rs = "1.12"
-criterion = { version = "0.8", features = ["html_reports", "async_tokio"] }
+criterion = { package = "codspeed-criterion-compat", version = "5.0.1", features = ["html_reports", "async_tokio"] }
 futures = "0.3.32"
 s2n-codec = { path = "../../common/s2n-codec" }
 s2n-quic-core = { path = "../../quic/s2n-quic-core", features = ["testing"] }
@@ -17,4 +17,8 @@ tokio-util = "0.7"
 
 [[bench]]
 name = "bench"
+harness = false
+
+[[bench]]
+name = "cpu"
 harness = false

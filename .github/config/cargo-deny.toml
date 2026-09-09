@@ -10,6 +10,7 @@ skip-tree = [
     { name = "bach" },
     { name = "bolero" },
     { name = "criterion" },
+    { name = "codspeed-criterion-compat" },
     { name = "insta" },
 
     # Ignore duplicate dependencies in private s2n-quic crates
@@ -41,6 +42,12 @@ allow = [
     "Zlib",
     "Unicode-3.0",
 ]
+
+[[licenses.exceptions]]
+# `colored` is a transitive dependency of `codspeed-criterion-compat` and is only pulled in by the
+# benchmark crates, which are never published or shipped to customers
+name = "colored"
+allow = ["MPL-2.0"]
 
 [[licenses.clarify]]
 name = "ring"
