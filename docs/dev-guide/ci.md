@@ -57,6 +57,18 @@ A loss recovery simulation tool plots the growth of the congestion window over t
 
 [dhat](https://crates.io/crates/dhat) performs heap profiling and publishes the results in [a report](https://dnglbrstg7yg.cloudfront.net/dhat/dh_view.html?url=/latest/dhat/dhat-heap.json). 
 
+## Continuous Benchmarking
+
+The `criterion` benchmarks in `quic/s2n-quic-bench` and the CPU-bound benchmarks in `dc/s2n-quic-dc-benches` are executed on every pull request by the [codspeed workflow](https://github.com/aws/s2n-quic/actions/workflows/codspeed.yml). [CodSpeed](https://codspeed.io) measures them under CPU simulation, which makes the results reproducible in CI, and reports the difference against the merge base on the pull request.
+
+The benchmarks can be measured locally the same way CI does:
+
+```bash
+cargo install cargo-codspeed --locked
+cargo codspeed build --measurement-mode simulation --package s2n-quic-bench
+cargo codspeed run --package s2n-quic-bench
+```
+
 ## Clippy
 
 [clippy](https://github.com/rust-lang/rust-clippy) is a rust linter which catches common mistakes.

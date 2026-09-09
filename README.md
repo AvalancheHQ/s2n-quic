@@ -17,6 +17,7 @@ See the [API documentation](https://docs.rs/s2n-quic), [examples](https://github
 [![Build Status][actions-badge]][actions-url]
 [![Dependencies][dependencies-badge]][dependencies-url]
 [![MSRV][msrv-badge]][msrv-url]
+[![CodSpeed][codspeed-badge]][codspeed-url]
 
 ## Installation
 
@@ -147,3 +148,5 @@ This project is licensed under the [Apache-2.0 License][license-url].
 [dependencies-url]: https://crates.io/crates/s2n-quic/dependencies
 [msrv-badge]: https://img.shields.io/badge/MSRV-1.92.0-green
 [msrv-url]: https://blog.rust-lang.org/2025/12/11/Rust-1.92.0/
+[codspeed-badge]: https://img.shields.io/endpoint?url=https://codspeed.io/badge.json
+[codspeed-url]: https://app.codspeed.io/AvalancheHQ/s2n-quic?utm_source=badge

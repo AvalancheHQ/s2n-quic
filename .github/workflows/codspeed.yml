@@ -1,0 +1,58 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  # `workflow_dispatch` allows CodSpeed to trigger backtest
+  # performance analysis in order to generate initial data.
+  workflow_dispatch:
+
+name: codspeed
+
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  RUSTUP_MAX_RETRIES: 10
+  RUST_BACKTRACE: 1
+
+permissions:
+  contents: read
+  id-token: write # required for requesting the JWT/OIDC used to authenticate with CodSpeed
+
+jobs:
+  benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Install rust toolchain
+        id: toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup override set stable
+
+      - uses: camshaft/rust-cache@v1
+
+      - name: Install cargo-codspeed
+        run: cargo install cargo-codspeed --locked
+
+      # `cargo codspeed build` is used instead of `cargo bench --no-run` since it links the
+      # benchmarks against the CodSpeed instrumentation.
+      #
+      # The `s2n-quic-dc-benches` `cpu` target is a subset of its `bench` target: it leaves out the
+      # stream throughput and handshake benchmarks, which depend on real sockets and multiple
+      # threads and therefore can't be measured deterministically.
+      - name: Build the benchmarks
+        run: |
+          cargo codspeed build --measurement-mode simulation --package s2n-quic-bench
+          cargo codspeed build --measurement-mode simulation --package s2n-quic-dc-benches --bench cpu
+
+      - name: Run the benchmarks
+        uses: CodSpeedHQ/action@v5
+        with:
+          mode: simulation
+          run: cargo codspeed run --package s2n-quic-bench --package s2n-quic-dc-benches
